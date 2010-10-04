@@ -20,4 +20,4 @@ As in HTML, <br> (or <BR) doesn't need to be closed.
 
 let tag1 = [ "class", "tag1" ]
 let tag2 = <:html< class="tag2" >>
-<:html< <div $alist:tag1$ $tag$2>foo</> >>
+<:html< <div $alist:tag1$ $tag2$>foo</> >>
