@@ -16,5 +16,6 @@ Remark: for the ease of simplicity, closing tags in quotations are simply writte
 
 == Attributes ==
 
-let tag1 = [ "class", "tag1" ]                                                              let tag2 = <:html< class="tag2" >>        
+let tag1 = [ "class", "tag1" ]
+let tag2 = <:html< class="tag2" >>
 <:html< <div $alist:tag1$ $tag2>foo</> >>
