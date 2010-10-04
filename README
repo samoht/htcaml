@@ -14,7 +14,7 @@ As in HTML, <br> (or <BR) doesn't need to be closed.
 
 == Antiquotations ==
 
-<:html< last modified : $Unix.time ()$ >>
+<:html< last modified : $flo:Unix.time ()$ >>
 
 == Attributes ==
 
