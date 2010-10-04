@@ -2,6 +2,8 @@ A simple HTML quotation mechanism for ocaml using camlp4.
 
 Project based on the very good CUFP tutorial by Jake Donham and Nicolas Pouillard (http://cufp.org/conference/sessions/2010/camlp4-and-template-haskell).
 
+Remark: for the ease of simplicity, closing tags in quotations are simply written </> (instead of </tag>). <br> (or <BR) is special cased as it has no closing tags.
+
 == Hello World ==
 
 <:html<
@@ -11,3 +13,8 @@ Project based on the very good CUFP tutorial by Jake Donham and Nicolas Pouillar
 == Antiquotations ==
 
 <:html< last modified : $Unix.time ()$ >>
+
+== Attributes ==
+
+let tag1 = [ "class", "tag1" ]                                                              let tag2 = <:html< class="tag2" >>        
+<:html< <div $alist:tag1$ $tag2>foo</> >>

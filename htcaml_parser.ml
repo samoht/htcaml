@@ -26,21 +26,21 @@ let parse_htcaml_eoi loc s = Gram.parse_string htcaml_eoi loc s
 let debug = ref false
 
 let debug (fmt: ('a , unit, string, unit) format4) =
-	if !debug then
-		Printf.kprintf (fun s -> print_string s) fmt
-	else
-		Printf.kprintf (fun s -> ()) fmt
+  if !debug then
+    Printf.kprintf (fun s -> print_string s) fmt
+  else
+    Printf.kprintf (fun s -> ()) fmt
 
 EXTEND Gram
   GLOBAL: htcaml_eoi;
 
   str: [[
-	  s = LIDENT    -> debug "LIDENT(%s) " s; s
-	| s = UIDENT    -> debug "UIDENT(%s) " s; s
-	| "-"; s = SELF -> debug "-(%s) " s; "-" ^ s
-	| "#"; s = SELF -> debug "#(%s) " s; "#" ^ s
+      s = LIDENT    -> debug "LIDENT(%s) " s; s
+    | s = UIDENT    -> debug "UIDENT(%s) " s; s
+    | "-"; s = SELF -> debug "-(%s) " s; "-" ^ s
+    | "#"; s = SELF -> debug "#(%s) " s; "#" ^ s
     | s1 = SELF; "-"; s2 = SELF -> debug "(%s-%s) " s1 s2; s1 ^ s2
-    | s = STRING    -> debug "STRING(%S) " s; "\"" ^ s ^ "\""
+    | s = STRING    -> debug "STRING(%S) " s; s
     | i = INT       -> debug "INT(%s) " i; i
     | f = FLOAT     -> debug "FLOAT(%s) " f; f
  ]];
