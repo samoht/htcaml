@@ -1,0 +1,8 @@
+name = "htcaml"
+version = "0.1"
+description = "HyperText Caml Meta Languages"
+requires = "camlp4"
+archive(byte) = "html.cmo"
+archive(native) = "html.cmx"
+archive(syntax, toploop) = "htcaml.cma,htcaml_top.cmo"
+archive(syntax, preprocessor) = "htcaml.cma"

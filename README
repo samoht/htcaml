@@ -1,0 +1,13 @@
+A simple HTML quotation mechanism for ocaml using camlp4.
+
+Project based on the very good CUFP tutorial by Jake Donham and Nicolas Pouillard (http://cufp.org/conference/sessions/2010/camlp4-and-template-haskell).
+
+== Hello World ==
+
+<:html<
+  <html: <body> <h1> Hello World! </> </> </>
+>>
+
+== Antiquotations ==
+
+<:html< last modified : $Unix.time ()$ >>
