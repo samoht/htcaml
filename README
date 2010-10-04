@@ -5,7 +5,7 @@ Project based on the very good CUFP tutorial by Jake Donham and Nicolas Pouillar
 == Hello World ==
 
 <:html<
-  <html: <body> <h1> Hello World! </> </> </>
+  <html> <body> <h1> Hello World! </> </> </>
 >>
 
 == Antiquotations ==
