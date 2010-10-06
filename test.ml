@@ -26,3 +26,15 @@ let page = <:html<
 
 let s = Html.to_string page
 let _ = Printf.printf "%s\n%!" s 
+
+(*
+let _ =
+  let foo = "foo" in
+  <:html< <link rel="stylesheet" href=$str:foo$ type="text/css" media="all"> </> >>
+
+let aux accu = function
+  | []      -> accu
+  | c :: t -> aux <:html< $accu$ id=$str:c$ >> t
+;;
+
+*)
