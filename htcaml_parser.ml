@@ -46,6 +46,7 @@ EXTEND Gram
     | s = STRING    -> debug "STRING(%S) " s; s
     | i = INT       -> debug "INT(%s) " i; i
     | f = FLOAT     -> debug "FLOAT(%s) " f; f
+    | k = KEYWORD   -> debug "KEYWORD(%s) " k; k
  ]];
 
   htcaml_seq: [[
