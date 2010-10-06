@@ -8,7 +8,7 @@ let title = <:html< <h1>Hello world</> >>;;
 
 let body = <:html<
   My $bold "name"$ is $str:me$
-  <br>
+  </br>
   You can find my webpage $here$
 >>;;
 
@@ -19,7 +19,7 @@ let page = <:html<
 <html>
   <body>
     $list:[title; body]$
-    <br>
+    </br>
     <div $alist:tag1$ $tag2$>tag</>
   </>
 </> >>

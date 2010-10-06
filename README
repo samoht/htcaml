@@ -4,7 +4,7 @@ Project based on the very good CUFP tutorial by Jake Donham and Nicolas Pouillar
 
 Remark: for the ease of simplicity, closing tags in quotations are simply written </> (instead of </tag>).
 
-As in HTML, <br> (or <BR) doesn't need to be closed.
+IMPORTANT : All tags have to be closed (including <br>, <link> or <meta>). However, </tag> can be used as a shortcut for <tag></>.
 
 == Hello World ==
 
