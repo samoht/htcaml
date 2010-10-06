@@ -80,7 +80,9 @@ EXTEND Gram
 
   htcaml0: [[
        s = str           -> String s
-    | "</"; s = str; ">" -> debug "EMPTY(%s) " s; Tag(s, Nil, Nil)
+
+    | "</"; s = str; ">"            -> debug "EMPTY-TAG(%s) " s; Tag(s, Nil, Nil)
+    | "</"; s = str; l = alist; ">" -> debug "EMPTY-TAG2(%s) " s; Tag(s, l, Nil)
 
     | "<"; s = str; ">"; e = htcaml; "</>" ->
         debug "TAG(%s) " s;

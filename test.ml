@@ -28,7 +28,8 @@ let s = Html.to_string page
 let _ = Printf.printf "%s\n%!" s 
 
 
-let _ = <:html< if then else in and or match >>
+let _ = <:html< if then else in and or match >>;;
+let _ = <:html< </meta contents="foo" href="bar"> >>;;
 
 (* XXX: =$ is parsed as a unique token ... so don't forget the white-space (until we have a better lexer) *)
 let _ =
