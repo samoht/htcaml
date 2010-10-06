@@ -39,6 +39,9 @@ EXTEND Gram
     | s = UIDENT    -> debug "UIDENT(%s) " s; s
     | "-"; s = SELF -> debug "-(%s) " s; "-" ^ s
     | "#"; s = SELF -> debug "#(%s) " s; "#" ^ s
+    | "#"; s = SELF -> debug "#(%s) " s; "#" ^ s
+    | "."; s = SELF -> debug ".(%s) " s; "." ^ s
+    | "."           -> debug ". "; "."
     | s1 = SELF; "-"; s2 = SELF -> debug "(%s-%s) " s1 s2; s1 ^ s2
     | s = STRING    -> debug "STRING(%S) " s; s
     | i = INT       -> debug "INT(%s) " i; i
