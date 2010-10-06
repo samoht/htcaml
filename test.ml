@@ -29,11 +29,15 @@ let _ = Printf.printf "%s\n%!" s
 
 
 let _ = <:html< if then else in and or match >>
-(*
+
+(* XXX: =$ is parsed as a unique token ... so don't forget the white-space (until we have a better lexer) *)
 let _ =
   let foo = "foo" in
-  <:html< <link rel="stylesheet" href=$str:foo$ type="text/css" media="all"> </> >>
+  <:html<
+    <link rel="stylesheet" href= $str:foo$ type="text/css" media="all"> </>
+  >>
 
+(*
 let aux accu = function
   | []      -> accu
   | c :: t -> aux <:html< $accu$ id=$str:c$ >> t

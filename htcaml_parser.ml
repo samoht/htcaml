@@ -23,7 +23,7 @@ let htcaml_eoi = Gram.Entry.mk "htcaml_eoi"
 
 let parse_htcaml_eoi loc s = Gram.parse_string htcaml_eoi loc s
 
-let debug = ref true
+let debug = ref false
 
 let debug (fmt: ('a , unit, string, unit) format4) =
   if !debug then
@@ -49,30 +49,57 @@ EXTEND Gram
     | s = SYMBOL    -> debug "SYMBOL(%s) " s; s
  ]];
 
-  htcaml_seq: [[
-	  hd = htcaml ->  hd
-    | hd = htcaml ; tl = SELF -> debug "SEQ "; Seq (hd, tl)
-    | -> Nil
+  alist0: [[
+     s1 = str; "="; s2 = str ->
+       debug "EQ(%s,%s) " s1 s2;
+       Prop(String s1, String s2)
+   | s1 = str; "="; a2 = anti ->
+       debug "EQ(%s,--) " s1;
+       Prop(String s1, a2)
+   | a1 = anti; "="; s2 = str ->
+       debug "EQ(--,%s) " s2;
+       Prop(a1, String s2)
+   | a1 = anti; "="; a2 = anti ->
+       debug "EQ(--,--) ";
+       Prop(a1, a2)
+   | a = anti ->
+       debug "----  ";
+       a
+  ]];
+  
+  alist: [[
+      hd = alist0            -> hd
+    | hd = alist0; tl = SELF -> debug "ASEQ "; Seq(hd, tl)
   ]];
 
-  htcaml: [[
-      s = str            -> String s
+  anti: [[
+   `ANTIQUOT (""|"int"|"flo"|"str"|"list"|"alist" as n, s) ->
+     debug "ANTI(%s:%s) " n s;
+     Ant (_loc, n ^ ":" ^ s)
+  ]];
+
+  htcaml0: [[
+       s = str           -> String s
     | "<"; "br"; ">"     -> debug "BR  "; Br
     | "<"; "BR"; ">"     -> debug "BR  "; Br
 
-    | "<"; s = str; ">"; e = htcaml_seq; "</>" ->
-        debug "TAG(%s) " s; Tag (s, Nil, e)
-    | "<"; s = str; l = htcaml_seq; ">"; e = htcaml_seq; "</>" ->
+    | "<"; s = str; ">"; e = htcaml; "</>" ->
+        debug "TAG(%s) " s;
+        Tag (s, Nil, e)
+    | "<"; s = str; l = alist; ">"; e = htcaml; "</>" ->
         debug "TAG2(%s) " s;
         Tag (s, l, e)
 
-    | s1 = SELF; "="; s2 = SELF ->
-       debug "PROP ";
-       Prop (s1, s2)
-
-    | `ANTIQUOT (""|"int"|"flo"|"str"|"list"|"alist" as n, s) ->
-        debug "ANTI(%s:%s) " n s; Ant (_loc, n ^ ":" ^ s)
+    | a = anti  -> a
+    | a = alist -> a
+    | s1=SELF;"=";s2=SELF -> Prop(s1, s2) (* XXX: very annoying that we need that one *)
   ]];
 
-  htcaml_eoi: [[ x = htcaml_seq; EOI -> debug "\n"; x ]];
+  htcaml: [[
+	  hd = htcaml0             -> hd
+    | hd = htcaml0 ; tl = SELF -> debug "SEQ "; Seq (hd, tl)
+    | -> Nil
+  ]];
+
+  htcaml_eoi: [[ x = htcaml; EOI -> debug "\n"; x ]];
 END
