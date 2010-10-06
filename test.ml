@@ -27,6 +27,8 @@ let page = <:html<
 let s = Html.to_string page
 let _ = Printf.printf "%s\n%!" s 
 
+
+let _ = <:html< if then else in and or match >>
 (*
 let _ =
   let foo = "foo" in

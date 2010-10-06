@@ -23,11 +23,11 @@ let htcaml_eoi = Gram.Entry.mk "htcaml_eoi"
 
 let parse_htcaml_eoi loc s = Gram.parse_string htcaml_eoi loc s
 
-let debug = ref false
+let debug = ref true
 
 let debug (fmt: ('a , unit, string, unit) format4) =
   if !debug then
-    Printf.kprintf (fun s -> print_string s) fmt
+    Printf.kprintf (fun s -> Printf.eprintf "%s%!" s) fmt
   else
     Printf.kprintf (fun s -> ()) fmt
 
@@ -46,7 +46,7 @@ EXTEND Gram
     | s = STRING    -> debug "STRING(%S) " s; s
     | i = INT       -> debug "INT(%s) " i; i
     | f = FLOAT     -> debug "FLOAT(%s) " f; f
-    | k = KEYWORD   -> debug "KEYWORD(%s) " k; k
+    | s = SYMBOL    -> debug "SYMBOL(%s) " s; s
  ]];
 
   htcaml_seq: [[
