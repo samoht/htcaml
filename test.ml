@@ -8,7 +8,7 @@ let title = <:html< <h1>Hello world</> >>;;
 
 let body = <:html<
   My $bold "name"$ is $str:me$
-  </br>
+  <br/>
   You can find my webpage $here$
 >>;;
 
@@ -19,7 +19,7 @@ let page = <:html<
 <html>
   <body>
     $list:[title; body]$
-    </br>
+    <br/>
     <div $alist:tag1$ $tag2$>tag</>
   </>
 </> >>
@@ -29,7 +29,7 @@ let _ = Printf.printf "%s\n%!" s
 
 
 let _ = <:html< if then else in and or match >>;;
-let _ = <:html< </meta contents="foo" href="bar"> >>;;
+let _ = <:html< <meta contents="foo" href="bar"/> >>;;
 
 (* XXX: =$ is parsed as a unique token ... so don't forget the white-space (until we have a better lexer) *)
 let _ =
