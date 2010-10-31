@@ -1,4 +1,3 @@
-true: debug
 <htcaml_ast.ml*>: pkg_camlp4
 <htcaml_location.ml*>: pkg_camlp4
 <htcaml_parser.ml*>: syntax_camlp4o,pkg_camlp4.extend
