@@ -13,7 +13,7 @@ let body = <:html<
 >>;;
 
 let tag1 = [ "class", "tag1" ]
-let tag2 = <:html< class="tag2" >>
+let tag2 = <:html< ^class="tag2"^ >>
 
 let page = <:html<
 <html>
@@ -21,7 +21,7 @@ let page = <:html<
     $list:[title; body]$
     <br/>
     <div $alist:tag1$ $tag2$>tag</>
-    <a href=$me ^ ".html"$ class=foo>$me$</>
+    <a href=$str:me ^ ".html"$ class=foo>$str:me$</>
   </>
 </> >>
 
@@ -36,7 +36,7 @@ let _ = <:html< <meta contents="foo" href="bar"/> >>;;
 let _ =
   let foo = "foo" in
   <:html<
-    <link rel="stylesheet" href= $str:foo$ type="text/css" media="all"> </>
+    <link rel="stylesheet" href=$str:foo$ type="text/css" media="all"/>
   >>
 
 (*
