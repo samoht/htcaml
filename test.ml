@@ -21,6 +21,7 @@ let page = <:html<
     $list:[title; body]$
     <br/>
     <div $alist:tag1$ $tag2$>tag</>
+    <a href=$me ^ ".html"$ class=foo>$me$</>
   </>
 </> >>
 
