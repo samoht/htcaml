@@ -1,7 +1,7 @@
 let bold b = <:html< <b> $str:b$ </> >> ;;
 
 let me = "Thomas"
-let here = <:html< <a href="http://thomas.gazagnaire.com"> here </> >>
+let here = <:html< <a href="http://gazagnaire.org"> here </> >>
 
 
 let title = <:html< <h1>Hello world</> >>;;
