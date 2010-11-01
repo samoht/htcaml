@@ -37,7 +37,9 @@ open Format
 
 let rec t ppf = function
   | String s         -> fprintf ppf "%s" s
+  | Tag (s, Nil, Nil)-> fprintf ppf "<%s/>" s
   | Tag (s, Nil, t1) -> fprintf ppf "@[<v 2><%s>%a</%s>@]@," s t t1 s
+  | Tag (s, l, Nil)  -> fprintf ppf "<%s %a/>" s t l
   | Tag (s, l, t1)   -> fprintf ppf "@[<v 2><%s %a>%a</%s>@]@," s t l t t1 s
   | Prop (k,v)       -> fprintf ppf "%a=%a" t k t v
   | Seq (t1, Nil)    -> t ppf t1
