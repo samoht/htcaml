@@ -13,7 +13,7 @@ let body = <:html<
 >>;;
 
 let tag1 = [ "class", "tag1" ]
-let tag2 = <:html< ^class="tag2"^ >>
+let tag2 = <:html< ^class=tag2^ >>
 
 let page = <:html<
 <html>

@@ -35,14 +35,13 @@ let rec list_of_t x acc =
 open Printf
 open Format
 
-(* XXX: figure out how the format module works exactly *)
 let rec t ppf = function
   | String s         -> fprintf ppf "%s" s
-  | Tag (s, Nil, t') -> fprintf ppf "<%s>%a</%s>" s t t' s
-  | Tag (s, l, t')   -> fprintf ppf "<%s %a>%a</%s>" s t l t t' s
-  | Prop (k,v)       -> fprintf ppf "%a=\"%a\"" t k t v
-  | Seq (t', Nil)    -> t ppf t'
-  | Seq (t1, t2)     -> fprintf ppf "%a @;<1 2>%a" t t1 t t2
+  | Tag (s, Nil, t1) -> fprintf ppf "<%s>@[<hov 2>@,%a@]</%s>" s t t1 s
+  | Tag (s, l, t1)   -> fprintf ppf "<%s %a>@[<hov 2>@,%a@]</%s>" s t l t t1 s
+  | Prop (k,v)       -> fprintf ppf "%a=%a" t k t v
+  | Seq (t1, Nil)    -> t ppf t1
+  | Seq (t1, t2)     -> fprintf ppf "%a %a" t t1 t t2
   | Nil              -> ()
 
 (* XXX: write a sanitizer *)
