@@ -50,7 +50,8 @@ let rec t ppf = function
   | Prop (k,v)       -> fprintf ppf "%a=%a" t k t v
   | Seq (t1, Nil)    -> t ppf t1
   | Seq (t1, t2)     ->
-    if next_string t2 = Some "." then
+    let str = next_string t2 in
+    if str = Some "." || str = Some "," || str = Some ";" then
       fprintf ppf "%a%a" t t1 t t2
     else
       fprintf ppf "%a %a" t t1 t t2
