@@ -1,15 +1,15 @@
 let bold b = <:html< <b> $str:b$ </> >> ;;
 
 let me = "Thomas"
-let here = <:html< <a href="http://gazagnaire.org"> here </> >>
+let here = <:html< <a href="http://gazagnaire.org">here</> >>
 
 
 let title = <:html< <h1>Hello world</> >>;;
 
 let body = <:html<
-  My $bold "name"$ is $str:me$
+  My $bold "name"$ is $str:me$.
   <br/>
-  You can find my webpage $here$
+  You can find my webpage $here$.
 >>;;
 
 let tag1 = [ "class", "tag1" ]
