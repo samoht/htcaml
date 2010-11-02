@@ -44,9 +44,9 @@ let rec next_string = function
 let rec t ppf = function
   | String s         -> fprintf ppf "%s" s
   | Tag (s, Nil, Nil)-> fprintf ppf "<%s/>" s
-  | Tag (s, Nil, t1) -> fprintf ppf "<%s>%a</%s>" s t t1 s
-  | Tag (s, l, Nil)  -> fprintf ppf "<%s %a/>" s t l
-  | Tag (s, l, t1)   -> fprintf ppf "<%s %a>%a</%s>" s t l t t1 s
+  | Tag (s, Nil, t1) -> fprintf ppf "@[<hov 1><%s>%a</%s>@]" s t t1 s
+  | Tag (s, l, Nil)  -> fprintf ppf "@[<hov 1><%s %a/>@]" s t l
+  | Tag (s, l, t1)   -> fprintf ppf "@[<hov 1><%s %a>%a</%s>@]" s t l t t1 s
   | Prop (k,v)       -> fprintf ppf "%a=%a" t k t v
   | Seq (t1, Nil)    -> t ppf t1
   | Seq (t1, t2)     ->
@@ -54,7 +54,7 @@ let rec t ppf = function
     if str = Some "." || str = Some "," || str = Some ";" then
       fprintf ppf "%a%a" t t1 t t2
     else
-      fprintf ppf "%a %a" t t1 t t2
+      fprintf ppf "%a@ %a" t t1 t t2
   | Nil              -> ()
 
 (* XXX: write a sanitizer *)
