@@ -23,8 +23,7 @@ clean:
 	rm -rf test.exp test.cmo test.cmx test.cmi test.o
 
 test:
-	ocamlbuild test.byte
-	./test.byte
+	ocamlbuild test.byte --
 
 test.exp: test.ml
 	camlp4orf _build/htcaml.cma test.ml -printer o > test.exp

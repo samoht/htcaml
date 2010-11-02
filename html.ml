@@ -41,8 +41,22 @@ let rec next_string = function
   | Seq(t,_)        -> next_string t
   | _               -> None
 
+(* XXX: make it complete *)
+let matching = Str.regexp "<\\|>\\|é\\|ë\\|è\\|à"
+let encoding str =
+  match Str.matched_string str with
+    | "<" -> "&lt"
+    | ">" -> "&gt"
+    | "é" -> "&eacute;"
+    | "ë" -> "&euml;"
+    | "è" -> "&egrave;"
+    | "à" -> "&agrave;"
+    | _   -> assert false
+let encode str =
+   Str.global_substitute matching encoding str
+
 let rec t ppf = function
-  | String s         -> fprintf ppf "%s" s
+  | String s         -> fprintf ppf "%s" (encode s)
   | Tag (s, Nil, Nil)-> fprintf ppf "<%s/>" s
   | Tag (s, Nil, t1) -> fprintf ppf "@[<hov 1><%s>%a</%s>@]" s t t1 s
   | Tag (s, l, Nil)  -> fprintf ppf "@[<hov 1><%s %a/>@]" s t l
