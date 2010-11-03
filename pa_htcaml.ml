@@ -35,6 +35,23 @@ let create_class _loc n body =
        (Html.String $str:n$))
     $body$ >>
 
+let create_id_class _loc n body =
+  <:expr<
+    match id with [
+      None    -> $create_class _loc n body$
+    | Some fn ->
+      Html.Tag
+        "div"
+        (Html.Seq (
+          Html.Prop
+            (Html.String "id")
+            (Html.String (fn $lid:n$)),
+          Html.Prop
+            (Html.String "class")
+            (Html.String $str:n$)))
+        $body$
+    ] >>
+
 let expr_list_of_list _loc exprs =
   match List.rev exprs with
   | []   -> <:expr< [] >>
@@ -72,18 +89,18 @@ let gen_html (_loc, n, t) =
 	  | Ext ("Html.t",_)
     | Var "Html.t"-> <:expr< $id$ >>
 
-	  | Ext (n,t) -> create_class _loc n (aux id t)
+	  | Ext (n,t) -> create_id_class _loc n (aux id t)
 	  | Rec (n,t) ->
         defs := (n,t) :: !defs;
-        create_class _loc n (aux id t)
+        create_id_class _loc n (aux id t)
 	  | Var n -> (* XXX: This will not work for recursive values *)
         if List.mem_assoc n !defs then
-          create_class _loc n (aux id (List.assoc n !defs))
+          create_id_class _loc n (aux id (List.assoc n !defs))
         else
           failwith n
   in
   let id = <:expr< $lid:n$ >> in
-  <:binding< $lid:html_of n$ $lid:n$ = $aux id t$ >>
+  <:binding< $lid:html_of n$ ?id $lid:n$ = $aux id t$ >>
 ;;
 
 let () =
