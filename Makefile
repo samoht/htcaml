@@ -22,7 +22,8 @@ clean:
 	ocamlbuild -clean
 	rm -rf test_exp.ml test.cmo test.cmx test.cmi test.o
 
-test:
+.PHONY: test
+test: all
 	ocamlbuild test.byte --
 
 INCLS = $(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a")
