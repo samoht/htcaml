@@ -98,3 +98,6 @@ with html
 type o =
   < x: f; y: x; z: string > 
   with html
+
+let _ =
+  Printf.printf "%s\n" (Html.to_string (html_of_i3 ~id:"foo" 31L))
