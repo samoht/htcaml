@@ -20,16 +20,18 @@ uninstall:
 
 clean:
 	ocamlbuild -clean
-	rm -rf test.exp test.cmo test.cmx test.cmi test.o
+	rm -rf test_exp.ml test.cmo test.cmx test.cmi test.o
 
 test:
 	ocamlbuild test.byte --
 
-INCLS=$(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a")
+INCLS = $(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a")
+BINCLS = $(shell ocamlfind query str -predicates byte -r -format "-I %d %a")
 
-.PHONY: test.exp
-test.exp: test.ml
-	camlp4orf $(INCLS) _build/htcaml.cma test.ml -printer o > test.exp
+.PHONY: test_exp
+test_exp: test.ml
+	camlp4orf $(INCLS) _build/htcaml.cma test.ml -printer o > test_exp.ml
+	ocamlc $(BINCLS) -I _build/ html.cmo test_exp.ml -o test
 
 debug: all
 	camlp4orf $(INCLS) _build/htcaml.cma test.ml
