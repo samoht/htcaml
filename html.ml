@@ -82,3 +82,13 @@ let rec t_of_list = function
   | [] -> Nil
   | [e] -> e
   | e::es -> Seq (e, t_of_list es)
+
+type link = {
+  text : string;
+  href: string;
+}
+
+let html_of_link l =
+  Tag ("a",
+       Prop(String "href", String ("\"" ^ l.href ^ "\"")),
+       String l.text)
