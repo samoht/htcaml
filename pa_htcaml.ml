@@ -39,14 +39,14 @@ let create_class _loc n body =
 let create_id_class _loc n id body =
   <:expr<
     match id with [
-      None    -> $create_class _loc n body$
-    | Some fn ->
+      None         -> $create_class _loc n body$
+    | Some html_id ->
       Html.Tag
         "div"
         (Html.Seq (
           Html.Prop
             (Html.String "id")
-            (Html.String (fn $id$)),
+            (Html.String html_id),
           Html.Prop
             (Html.String "class")
             (Html.String $str:n$)))
