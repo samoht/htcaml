@@ -25,9 +25,12 @@ clean:
 test:
 	ocamlbuild test.byte --
 
+INCLS=$(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a")
+
+.PHONY: test.exp
 test.exp: test.ml
-	camlp4orf _build/htcaml.cma test.ml -printer o > test.exp
+	camlp4orf $(INCLS) _build/htcaml.cma test.ml -printer o > test.exp
 
 debug: all
-	camlp4orf _build/htcaml.cma test.ml
+	camlp4orf $(INCLS) _build/htcaml.cma test.ml
 

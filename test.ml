@@ -1,3 +1,26 @@
+type link = {
+  contents: string;
+  href: string;
+} with html
+
+let html_of_link l =
+  <:html< <a href=$str:"\""^l.href^"\""$>$str:l.contents$</> >>
+
+type body = {
+  left : Html.t;
+  right: Html.t;
+} with html
+  
+let l1 = {
+  contents="john";
+  href="http://www.johndoe.com"
+}
+
+let b1 = {
+  left= <:html< Gauuche >>;
+  right= <:html< Droiiite >>
+}
+
 let bold b = <:html< <b> $str:b$ </> >> ;;
 
 let me = "Thomas"
@@ -18,6 +41,8 @@ let tag2 = <:html< ^class=tag2^ >>
 let page = <:html<
 <html>
   <body>
+    $html_of_body b1$
+    $html_of_link l1$
     $list:[title; body]$
     <br/>
     <div $alist:tag1$ $tag2$>tag</>
@@ -32,17 +57,8 @@ let _ = Printf.printf "%s\n%!" s
 let _ = <:html< if then else in and or match >>;;
 let _ = <:html< <meta contents="foo" href="bar"/> >>;;
 
-(* XXX: =$ is parsed as a unique token ... so don't forget the white-space (until we have a better lexer) *)
 let _ =
   let foo = "foo" in
   <:html<
     <link rel="stylesheet" href=$str:foo$ type="text/css" media="all"/>
   >>
-
-(*
-let aux accu = function
-  | []      -> accu
-  | c :: t -> aux <:html< $accu$ id=$str:c$ >> t
-;;
-
-*)

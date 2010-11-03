@@ -78,3 +78,7 @@ let to_string t' =
   t str_formatter t';
   sanitaze (flush_str_formatter ())
 
+let rec t_of_list = function
+  | [] -> Nil
+  | [e] -> e
+  | e::es -> Seq (e, t_of_list es)

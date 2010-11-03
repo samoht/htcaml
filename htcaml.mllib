@@ -4,3 +4,4 @@ Htcaml_lexer
 Htcaml_parser
 Htcaml_printer
 Htcaml_quotations
+Pa_htcaml
