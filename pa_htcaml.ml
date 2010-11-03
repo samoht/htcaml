@@ -85,7 +85,6 @@ let gen_html (_loc, n, t_exp) =
         let $patt_tuple_of_list _loc patts$ = $id$ in
         Html.t_of_list $expr_list_of_list _loc exprs$
         >>
-
 	  | Dict(k,d) ->
       let new_id n = match k with
         | `R -> <:expr< $id$.$lid:n$ >>
