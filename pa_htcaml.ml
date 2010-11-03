@@ -16,6 +16,7 @@
 
 open Type
 open Camlp4.PreCast
+open P4_helpers
 
 let html_of t = "html_of_" ^ t
 
@@ -35,7 +36,7 @@ let create_class _loc n body =
        (Html.String $str:n$))
     $body$ >>
 
-let create_id_class _loc n body =
+let create_id_class _loc n id body =
   <:expr<
     match id with [
       None    -> $create_class _loc n body$
@@ -45,63 +46,71 @@ let create_id_class _loc n body =
         (Html.Seq (
           Html.Prop
             (Html.String "id")
-            (Html.String (fn $lid:n$)),
+            (Html.String (fn $id$)),
           Html.Prop
             (Html.String "class")
             (Html.String $str:n$)))
         $body$
     ] >>
 
-let expr_list_of_list _loc exprs =
-  match List.rev exprs with
-  | []   -> <:expr< [] >>
-  | h::t -> List.fold_left (fun accu x -> <:expr< [ $x$ :: $accu$ ] >>) <:expr< [ $h$ ] >> t
-
-let gen_html (_loc, n, t) =
-  let defs = ref [] in
+let gen_html (_loc, n, t_exp) =
+  let t = match t_exp with Ext (_,t) | Rec (_,t) -> t | _ -> assert false in
   let rec aux id = function
 	  | Unit     -> <:expr< >>
 	  | Bool     -> <:expr< Html.String (string_of_bool $id$) >>
     | Float    -> <:expr< Html.String (string_of_float $id$) >>
     | Char     -> <:expr< Html.String (String.make 1 $id$) >>
     | String   -> <:expr< Html.String $id$ >>
-	  | Int i    -> <:expr< Html.String (string_of_int $id$) >>
-	  | Enum t   ->
-        let pid, eid = new_id _loc () in
-        <:expr< Html.t_of_list (List.map (fun $pid$ -> $aux eid t$) $id$) >>
+	  | Int (Some i) when i <= 64 ->
+      if i + 1 = Sys.word_size then
+        <:expr< Html.String (string_of_int $id$) >>
+      else if i <= 32 then
+        <:expr< Html.String (Int32.to_string $id$) >>
+      else
+        <:expr< Html.String (Int64.to_string $id$) >>
+    | Int _ ->
+      <:expr< Html.String (Bigint.to_string $id$) >>
+	  | List t   ->
+      let pid, eid = new_id _loc () in
+      <:expr< Html.t_of_list (List.map (fun $pid$ -> $aux eid t$) $id$) >>
+	  | Array t  ->
+      let pid, eid = new_id _loc () in
+      let array = <:expr< Array.map (fun $pid$ -> $aux eid t$) $id$ >> in
+      <:expr< Html.t_of_list (Array.to_list $array$) >>
 	  | Tuple t  ->
-        let ids = List.map (new_id _loc) t in
-        let patts = List.map fst ids in
-        let exprs = List.map2 (fun i t -> aux i t) (List.map snd ids) t in
-        <:expr<
-          let ( $Ast.paCom_of_list patts$ ) = $id$ in
-          Html.t_of_list [ $Ast.exSem_of_list exprs$ ]
-          >>
+      let ids = List.map (new_id _loc) t in
+      let patts = List.map fst ids in
+      let exprs = List.map2 (fun i t -> aux i t) (List.map snd ids) t in
+      <:expr<
+        let $patt_tuple_of_list _loc patts$ = $id$ in
+        Html.t_of_list $expr_list_of_list _loc exprs$
+        >>
 
-	  | Dict d ->
-        let exprs = List.map (fun (n,_,t) -> create_class _loc n (aux <:expr< $id$.$lid:n$ >> t)) d in
-        let expr = expr_list_of_list _loc exprs in
-        <:expr< Html.t_of_list $expr$ >>
+	  | Dict(k,d) ->
+      let new_id n = match k with
+        | `R -> <:expr< $id$.$lid:n$ >>
+        | `O -> <:expr< $id$#$lid:n$ >> in
+      let exprs =
+        List.map (fun (n,_,t) -> create_class _loc n (aux (new_id n) t)) d in
+      let expr = expr_list_of_list _loc exprs in
+      <:expr< Html.t_of_list $expr$ >>
 	  | Sum _
 	  | Option _
 	  | Arrow _  -> failwith "not yet supported"
 
 	  | Ext ("Html.t",_)
-    | Var "Html.t"-> <:expr< $id$ >>
+    | Var "Html.t"     -> <:expr< $id$ >>
 
-	  | Ext (n,t) -> create_id_class _loc n (aux id t)
-	  | Rec (n,t) ->
-        defs := (n,t) :: !defs;
-        create_id_class _loc n (aux id t)
-	  | Var n -> (* XXX: This will not work for recursive values *)
-        if List.mem_assoc n !defs then
-          create_id_class _loc n (aux id (List.assoc n !defs))
-        else
-          failwith n
+	  | Ext (n,_)
+	  | Rec (n,_)
+	  | Var n    ->
+      (* XXX: This will not work for recursive values *)
+      <:expr< $P4_type.gen_ident _loc html_of n$ $id$ >>
   in
   let id = <:expr< $lid:n$ >> in
-  <:binding< $lid:html_of n$ ?id $lid:n$ = $aux id t$ >>
-;;
+  <:binding< $lid:html_of n$ ?id $lid:n$ =
+      $create_id_class _loc n id (aux id t)$
+  >>
 
 let () =
   Pa_type_conv.add_generator "html"
@@ -109,7 +118,7 @@ let () =
 			 try
          let _loc = Ast.loc_of_ctyp tds in
 			   <:str_item<
-				   value $Ast.biAnd_of_list (List.map gen_html (P4_type.create tds))$;
+				   value rec $Ast.biAnd_of_list (List.map gen_html (P4_type.create tds))$;
 			   >>
        with Not_found ->
          Printf.eprintf "[Internal Error]\n";
