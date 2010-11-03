@@ -62,3 +62,39 @@ let _ =
   <:html<
     <link rel="stylesheet" href=$str:foo$ type="text/css" media="all"/>
   >>
+
+
+(* Imported from dyntype/lib_test/test_type.ml *)
+module M = struct type t = int with html end
+
+type i1 = int32
+and  i2 = int
+and  i3 = int64
+and  i4 = ( int32 * int * int64 )
+(*and  p =
+  | One of string * int array
+  | Two of t
+  | Three of x option list
+
+and pp = [ `Poly1 | `Poly2 | `Poly3 of int ]
+*)
+and t = {
+  t1: M.t;
+  mutable t2: string;
+  t3: x
+} and x = {
+  x1: t array;
+  x2: int64
+} and f = {
+  mutable f1: int;
+  mutable f2: string list;
+  f3: string;
+  f4: int64;
+  f5: char array;
+} and tu = ( int  * f * i4 )
+
+with html
+
+type o =
+  < x: f; y: x; z: string > 
+  with html
