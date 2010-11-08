@@ -18,7 +18,7 @@ open Camlp4.PreCast (* for Ast refs in generated code *)
 
 type t =
   | String of string
-  | Tag of string * t * t
+  | Tag of t * t * t
   | Prop of t * t
   | Seq of t * t
   | Nil
@@ -27,7 +27,7 @@ type t =
 
 let rec meta_t _loc = function
   | String s    -> <:expr< Html.String $`str:s$ >>
-  | Tag (t,l,s) -> <:expr< Html.Tag ($`str:t$, $meta_t _loc l$, $meta_t _loc s$) >>
+  | Tag (t,l,s) -> <:expr< Html.Tag ($meta_t _loc t$, $meta_t _loc l$, $meta_t _loc s$) >>
   | Prop (k,v)  -> <:expr< Html.Prop ($meta_t _loc k$, $meta_t _loc v$) >>
   | Seq (a,b)   -> <:expr< Html.Seq ($meta_t _loc a$, $meta_t _loc b$) >> 
   | Nil         -> <:expr< Html.Nil >>

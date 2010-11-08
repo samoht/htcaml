@@ -14,18 +14,36 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-open Camlp4.PreCast
+open Htcaml_ast
 
-type t =
-  | String of string
-  | Tag of t * t * t
-  | Prop of t * t
-  | Seq of t * t
-  | Nil
+let is_quotation str =
+  str.[0] = '$' && str.[String.length str - 1] = '$'
 
-  | Ant of Loc.t * string
+let get_quotation str =
+  String.sub str 1 (String.length str - 3)
 
-val meta_t : Ast.loc -> t -> Ast.expr
+let make str =
+  if is_quotation str then
+    Ant (Camlp4.PreCast.Loc.ghost, get_quotation str)
+  else
+    String str
 
-val t_of_list : t list -> t
-val list_of_t : t -> t list -> t list
+let input i =
+  let el ((_,name), attrs) body =
+    let name = make name in
+    let attrs = List.map (fun ((_,k),v) -> Prop (make k, make v)) attrs in
+    Tag (name, t_of_list attrs, t_of_list body) in
+  let data str =
+    make str in
+  Xmlm.input_tree ~el ~data i
+
+let parse str =
+  let entity str =
+    if is_quotation str then
+      Some str
+    else
+      None in
+  let enc = Some `UTF_8 in
+  let i = Xmlm.make_input ~enc ~entity (`String (0, str)) in
+  input i
+  
