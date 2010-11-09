@@ -44,5 +44,8 @@ type link = {
 let html_of_link l : t =
   [`El ((("","a"), [ ("","href"), l.href ]), [`Data l.text])]
 
+
+let encoding : Xmlm.encoding option ref = ref None
+
 let set_encoding e =
-  Htcaml_quotations.encoding := Some e
+  encoding := Some e

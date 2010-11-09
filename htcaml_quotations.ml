@@ -86,10 +86,8 @@ object
       | e -> super#expr e
 end
 
-let encoding : Xmlm.encoding option ref = ref None
-
 let parse_quot_string loc s : Htcaml_ast.t =
-  Htcaml_parser.parse ?enc:!encoding loc s
+  Htcaml_parser.parse ?enc:!Html.encoding loc s
 
 let expand_expr loc _ s =
   let ast = parse_quot_string loc s in
