@@ -9,7 +9,7 @@ This library needs a modified version of xmlm available [here](http://www.github
 The only difference with upstream is that it does not display DTD when there is no DTD (upstream
 prints an empty DTD tag).
 
-Remark : As we are parsing valid XHTML only, all tags have to be closed. Empty tags (including `<br>`, `<link>` or `<meta>`) are closed using <tag/>.
+Remark : As we are parsing valid XHTML only, all tags have to be closed. Empty tags (including `<br>`, `<link>` or `<meta>`) are closed using `<tag/>`.
 
 == Hello World ==
 
@@ -19,28 +19,28 @@ Remark : As we are parsing valid XHTML only, all tags have to be closed. Empty t
 
 == Antiquotations ==
 
-   <:html< last modified : $flo:Unix.time ()$ >>
+    <:html< last modified : $flo:Unix.time ()$ >>
 
 == Attributes ==
 
-   let tag1 = [ "class", "tag1" ]
-   let tag2 = <:html< class="tag2" >>
-   <:html< <div $alist:tag1$ $tag2$>foo</> >>
+    let tag1 = [ "class", "tag1" ]
+    let tag2 = <:html< class="tag2" >>
+    <:html< <div $alist:tag1$ $tag2$>foo</> >>
 
 == Auto-generated code ==
 
-   let tweet = {
-     author = string;
-     text = Html.t;
-   } with html
+    let tweet = {
+      author = string;
+      text = Html.t;
+    } with html
 
 will produce:
 
-   val html_of_tweet : tweet -> Html.t
+    val html_of_tweet : tweet -> Html.t
 
 `html_of_tweet { author = "Jonn"; text = <:html< Some <b>text</b>!!! >> }` will look to something similar to :
 
-   <div class="tweet">
-     <div class="author">John</div>
-     <div class="text"> Some <b>text</b>!!! </div>
-   </div>
+    <div class="tweet">
+      <div class="author">John</div>
+      <div class="text"> Some <b>text</b>!!! </div>
+    </div>
