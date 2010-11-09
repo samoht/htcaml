@@ -14,15 +14,4 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-open Camlp4.PreCast
-
-let add loc (l, c) =
-  let loc =
-    if l > 1 then
-      Loc.move_line (l-1) loc
-    else
-      loc in
-  Loc.shift (c-1) loc
-
-let raise loc pos exn =
-  Loc.raise (add loc pos) exn
+val parse : Camlp4.PreCast.Loc.t -> string -> Htcaml_ast.t

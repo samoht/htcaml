@@ -1,6 +1,6 @@
 Htcaml_ast
 Htcaml_location
-Htcaml_lexer
+Xhtml
 Htcaml_parser
 Htcaml_printer
 Htcaml_quotations
