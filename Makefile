@@ -5,6 +5,7 @@ htcaml_parser.mli htcaml_parser.cmi htcaml_parser.cmx \
 htcaml_printer.mli htcaml_printer.cmi htcaml_printer.cmx \
 htcaml_quotations.cmi htcaml_quotations.cmx \
 htcaml_top.cmo \
+xhtml.cmi xhtml.cmx \
 html.cmx html.cmo html.cmi
 
 BFILES=$(addprefix _build/,$(FILES))
