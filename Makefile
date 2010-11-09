@@ -3,6 +3,7 @@ htcaml.cmxa htcaml.cma \
 htcaml_ast.mli htcaml_ast.cmi htcaml_ast.cmx \
 htcaml_parser.mli htcaml_parser.cmi htcaml_parser.cmx \
 htcaml_printer.mli htcaml_printer.cmi htcaml_printer.cmx \
+htcaml_quotations.cmi htcaml_quotations.cmx \
 htcaml_top.cmo \
 html.cmx html.cmo html.cmi
 

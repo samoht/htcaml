@@ -18,7 +18,7 @@ open Camlp4.PreCast
 
 type t =
   | String of string
-  | Tag of t * t * t
+  | Tag of string * t * t
   | Prop of t * t
   | Seq of t * t
   | Nil

@@ -50,7 +50,9 @@ object
 end
 
 let parse_quot_string loc s : Htcaml_ast.t =
-  let res = Htcaml_parser.parse s in
+  Htcaml_location.set loc;
+  let res = Htcaml_parser.main Htcaml_lexer.token (Lexing.from_string s) in
+  Htcaml_location.set Loc.ghost;
   res
 
 let expand_expr loc _ s =
