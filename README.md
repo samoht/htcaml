@@ -9,7 +9,7 @@ This library needs a modified version of xmlm available [here](http://www.github
 The only difference with upstream is that it does not display DTD when there is no DTD (upstream
 prints an empty DTD tag).
 
-Remark : As we are parsing valid XHTML only, all tags have to be closed. Empty tags (including <br>, <link> or <meta>) are closed using <tag/>.
+Remark : As we are parsing valid XHTML only, all tags have to be closed. Empty tags (including `<br>`, `<link>` or `<meta>`) are closed using <tag/>.
 
 == Hello World ==
 
