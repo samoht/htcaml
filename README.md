@@ -5,8 +5,9 @@ This library started as a toy-project at the very good
 by [Jake Donham](http://www.github.com/jaked) and [Nicolas Pouillard](http://www.github.com/np).
 It is now in a working state for bigger projects.
 
-This library includes a modified version of xmlm available [here](http://www.github.com/samoht/xmlm)
- to do not display DTD when it is not needed.
+This library needs a modified version of xmlm available [here](http://www.github.com/samoht/xmlm).
+The only difference with upstream is that it does not display DTD when there is no DTD (upstream
+prints an empty DTD tag).
 
 Remark : As we are parsing valid XHTML only, all tags have to be closed. Empty tags (including <br>, <link> or <meta>) are closed using <tag/>.
 
