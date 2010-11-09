@@ -43,3 +43,6 @@ type link = {
 
 let html_of_link l : t =
   [`El ((("","a"), [ ("","href"), l.href ]), [`Data l.text])]
+
+let set_encoding e =
+  Htcaml_quotations.encoding := Some e
