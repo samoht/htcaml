@@ -14,81 +14,32 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-type t =
-  | String of string
-  | Tag of string * t * t
-  | Prop of t * t
-  | Seq of t * t
-  | Nil
+type elt = ('a Xmlm.frag as 'a) Xmlm.frag
+type t = elt list
 
-let rec t_of_list = function
-  | [] -> Nil
-  | [e] -> e
-  | e::es -> Seq (e, t_of_list es)
+let id x = x
 
-let rec list_of_t x acc =
-  match x with
-  | Nil -> acc
-  | Seq (e1, e2) -> list_of_t e1 (list_of_t e2 acc)
-  | e -> e :: acc
+let rec output_t output = function
+  | (`Data _ as d) :: t ->
+    Xmlm.output output d;
+    output_t output t
+  | (`El _ as e) :: t   ->
+    Xmlm.output_tree id output e;
+    Xmlm.output output (`Dtd None);
+    output_t output t
+  | [] -> ()
 
-open Printf
-open Format
-
-let rec next_string = function
-  | String s        -> Some s
-  | Seq(String s,_) -> Some s
-  | Seq(t,_)        -> next_string t
-  | _               -> None
-
-(* XXX: make it complete *)
-let matching = Str.regexp "<\\|>\\|é\\|ë\\|è\\|à"
-let encoding str =
-  match Str.matched_string str with
-    | "<" -> "&lt"
-    | ">" -> "&gt"
-    | "é" -> "&eacute;"
-    | "ë" -> "&euml;"
-    | "è" -> "&egrave;"
-    | "à" -> "&agrave;"
-    | _   -> assert false
-let encode str =
-   Str.global_substitute matching encoding str
-
-let rec t ppf = function
-  | String s         -> fprintf ppf "%s" (encode s)
-  | Tag (s, Nil, Nil)-> fprintf ppf "<%s/>" s
-  | Tag (s, Nil, t1) -> fprintf ppf "@[<hov 1><%s>%a</%s>@]" s t t1 s
-  | Tag (s, l, Nil)  -> fprintf ppf "@[<hov 1><%s %a/>@]" s t l
-  | Tag (s, l, t1)   -> fprintf ppf "@[<hov 1><%s %a>%a</%s>@]" s t l t t1 s
-  | Prop (k,v)       -> fprintf ppf "%a=%a" t k t v
-  | Seq (t1, Nil)    -> t ppf t1
-  | Seq (t1, t2)     ->
-    let str = next_string t2 in
-    if str = Some "." || str = Some "," || str = Some ";" then
-      fprintf ppf "%a%a" t t1 t t2
-    else
-      fprintf ppf "%a@ %a" t t1 t t2
-  | Nil              -> ()
-
-(* XXX: write a sanitizer *)
-let sanitaze t = t
-
-let to_string t' =
-  t str_formatter t';
-  sanitaze (flush_str_formatter ())
-
-let rec t_of_list = function
-  | [] -> Nil
-  | [e] -> e
-  | e::es -> Seq (e, t_of_list es)
+let to_string t =
+  let buf = Buffer.create 1024 in
+  let output = Xmlm.make_output (`Buffer buf) in
+  Xmlm.output output (`Dtd None);
+  output_t output t;
+  Buffer.contents buf
 
 type link = {
   text : string;
   href: string;
 }
 
-let html_of_link l =
-  Tag ("a",
-       Prop(String "href", String ("\"" ^ l.href ^ "\"")),
-       String l.text)
+let html_of_link l : t =
+  [`El ((("","a"), [ ("","href"), l.href ]), [`Data l.text])]

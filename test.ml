@@ -3,8 +3,8 @@ type link = {
   href: string;
 } with html
 
-let html_of_link l =
-  <:html< <a href=$str:"\""^l.href^"\""$>$str:l.contents$</> >>
+let html_of_link l : Html.t =
+  <:html< <a href=$str:l.href$>$str:l.contents$</a> >>
 
 type body = {
   left : Html.t;
@@ -21,13 +21,13 @@ let b1 = {
   right= <:html< Droiiite >>
 }
 
-let bold b = <:html< <b> $str:b$ </> >> ;;
+let bold b = <:html< <b> $str:b$ </b> >> ;;
 
 let me = "Thomas"
-let here = <:html< <a href="http://gazagnaire.org">here</> >>
+let here = <:html< <a href="http://gazagnaire.org">here</a> >>
 
 
-let title = <:html< <h1>Hello world</> >>;;
+let title = <:html< <h1>Hello world</h1> >>;;
 
 let body = <:html<
   My $bold "name"$ is $str:me$.
@@ -36,7 +36,7 @@ let body = <:html<
 >>;;
 
 let tag1 = [ "class", "tag1" ]
-let tag2 = <:html< ^class=tag2^ >>
+let tag2 = <:html<class="tag2">> (* XXX: no space/tab in the quotation *)
 
 let page = <:html<
 <html>
@@ -45,10 +45,10 @@ let page = <:html<
     $html_of_link l1$
     $list:[title; body]$
     <br/>
-    <div $alist:tag1$ $tag2$>tag</>
-    <a href=$str:me ^ ".html"$ class=foo>$str:me$</>
-  </>
-</> >>
+    <div $alist:tag1$ $attrs:tag2$>tag</div>
+    <a href=$str:(me ^ ".html")$ class="foo">$str:me$</a>
+  </body>
+</html> >>
 
 let s = Html.to_string page
 let _ = Printf.printf "%s\n%!" s 
