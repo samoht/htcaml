@@ -25,7 +25,7 @@ Remark : As we are parsing valid XHTML only, all tags have to be closed. Empty t
 
     let tag1 = [ "class", "tag1" ]
     let tag2 = <:html< class="tag2" >>
-    <:html< <div $alist:tag1$ $tag2$>foo</> >>
+    <:html< <div $alist:tag1$ $attrs:tag2$>foo</> >>
 
 == Auto-generated code ==
 
