@@ -97,7 +97,7 @@ let input_tree loc input =
     decode loc input str in
   Xmlm.input_tree ~el ~data input
   
-let parse loc str =
+let parse loc ?enc str =
   (* It is illegal to write <:html<<b>foo</b>>> so we use a small trick and write
      <:html<<b>foo</b>&>> *)
   let str = if str.[String.length str - 1] = '&' then
@@ -108,7 +108,7 @@ let parse loc str =
   let str = Printf.sprintf "<htcaml>%s</htcaml>" str in
   let str = encode str in
   try
-    let input = Xmlm.make_input ~enc:(Some `UTF_8) ~entity:Xhtml.entity (`String (0,str)) in
+    let input = Xmlm.make_input ~enc ~entity:Xhtml.entity (`String (0,str)) in
     (* Xmlm.make_input builds a well-formed document, so discard the Dtd *)
     (match Xmlm.peek input with
       | `Dtd _ -> let _ = Xmlm.input input in ()

@@ -14,4 +14,4 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-val parse : Camlp4.PreCast.Loc.t -> string -> Htcaml_ast.t
+val parse : Camlp4.PreCast.Loc.t -> ?enc:Xmlm.encoding -> string -> Htcaml_ast.t
