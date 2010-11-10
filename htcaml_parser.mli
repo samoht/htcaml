@@ -15,3 +15,6 @@
  *)
 
 val parse : Camlp4.PreCast.Loc.t -> ?enc:Xmlm.encoding -> string -> Htcaml_ast.t
+
+val get_encoding : unit -> Xmlm.encoding option
+val set_encoding : Xmlm.encoding -> unit

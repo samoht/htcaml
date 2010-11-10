@@ -14,6 +14,14 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
+let encoding : Xmlm.encoding option ref = ref None
+
+let set_encoding e =
+  encoding := Some e
+
+let get_encoding () =
+  !encoding
+
 (* Antiquotation $...$ are converted to the strings '$i$', where i is the order
    in which the quotation appears in the program. So we deal with only one level
    of antiquotations here (ie. we do not support nested quotations). But that's

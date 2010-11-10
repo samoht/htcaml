@@ -98,7 +98,7 @@ let gen_html (_loc, n, t_exp) =
       <:expr< $P4_type.gen_ident _loc html_of n$ $id$ >>
   in
   let id = <:expr< $lid:n$ >> in
-  <:binding< $lid:html_of n$ ?id $lid:n$ : Html.t =
+  <:binding< $lid:html_of n$ ?id $lid:n$ =
       [ $create_id_class _loc n id (aux id t)$ ]
   >>
 

@@ -11,7 +11,8 @@ html.cmx html.cmo html.cmi
 BFILES=$(addprefix _build/,$(FILES))
 
 all:
-	ocamlbuild html.cmo html.cmx htcaml.cma htcaml_top.cmo htcaml.cmxa
+	ocamlbuild htcaml.cma htcaml_top.cmo htcaml.cmxa
+#	ocamllbuild -pp "camlp4orf _build/htcaml.cma" html.cmo html.cmx
 
 install:
 	ocamlfind install htcaml META $(BFILES)
