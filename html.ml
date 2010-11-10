@@ -42,7 +42,7 @@ type link = {
 }
 
 let html_of_link l : t =
-  [`El ((("","a"), [ ("","href"), l.href ]), [`Data l.text])]
+  <:html<<a href=$str:l.href$>$str:l.text$</a>&>>
 
 
 let encoding : Xmlm.encoding option ref = ref None
