@@ -14,11 +14,7 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *)
 
-type elt = ('a Xmlm.frag as 'a) Xmlm.frag
-type t = elt list
-
-(* This is need to make the syntax extensio working *)
-module Html = struct type t = elt list end
+type t = (('a Xmlm.frag as 'a) Xmlm.frag) list
 
 let id x = x
 

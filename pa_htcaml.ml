@@ -98,7 +98,7 @@ let gen_html (_loc, n, t_exp) =
       <:expr< $P4_type.gen_ident _loc html_of n$ $id$ >>
   in
   let id = <:expr< $lid:n$ >> in
-  <:binding< $lid:html_of n$ ?id $lid:n$ : Html.t =
+  <:binding< $lid:html_of n$ ?id $lid:n$ : (list (Xmlm.frag (Xmlm.frag 'a as 'a))) =
       [ $create_id_class _loc n id (aux id t)$ ]
   >>
 
