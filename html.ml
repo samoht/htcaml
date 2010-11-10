@@ -17,6 +17,9 @@
 type elt = ('a Xmlm.frag as 'a) Xmlm.frag
 type t = elt list
 
+(* This is need to make the syntax extensio working *)
+module Html = struct type t = elt list end
+
 let id x = x
 
 let rec output_t output = function

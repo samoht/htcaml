@@ -10,9 +10,12 @@ html.cmx html.cmo html.cmi
 
 BFILES=$(addprefix _build/,$(FILES))
 
+INCLS = $(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a") \
+        $(shell ocamlfind query xmlm -predicates byte -r -format "-I %d %a") \
+        $(shell ocamlfind query str -predicates byte -r -format "-I %d %a")
 all:
 	ocamlbuild htcaml.cma htcaml_top.cmo htcaml.cmxa
-#	ocamllbuild -pp "camlp4orf _build/htcaml.cma" html.cmo html.cmx
+	ocamlbuild -pp "camlp4o $(INCLS) htcaml.cma" html.cmo html.cmx
 
 install:
 	ocamlfind install htcaml META $(BFILES)
@@ -26,11 +29,7 @@ clean:
 
 .PHONY: test
 test: all
-	ocamlbuild test.byte --
-
-INCLS = $(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a") \
-        $(shell ocamlfind query xmlm -predicates byte -r -format "-I %d %a") \
-        $(shell ocamlfind query str -predicates byte -r -format "-I %d %a")
+	ocamlbuild -pp "camlp4o $(INCLS) htcaml.cma" test.byte --
 
 .PHONY: test_exp
 test_exp: test.ml

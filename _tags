@@ -6,4 +6,4 @@ true: debug
 <htcaml_quotations.ml*>: syntax_camlp4o,pkg_camlp4.quotations
 <htcaml_ast.ml*>: syntax_camlp4o,pkg_camlp4.quotations
 <pa_htcaml.ml*>: syntax_camlp4o,pkg_camlp4.quotations,pkg_dyntype.syntax
-<test.*>: syntax_camlp4o,pkg_dyntype.syntax,pkg_htcaml,pkg_xmlm
+<test.*>: syntax_camlp4o,pkg_dyntype.syntax,pkg_htcaml,pkg_xmlm,pkg_str
