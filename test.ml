@@ -47,6 +47,7 @@ let page = <:html<
     <br/>
     <div $alist:tag1$ $attrs:tag2$>tag</div>
     <a href=$str:(me ^ ".html")$ class="foo">$str:me$</a>
+    $Html.Code.parse "let f x = if x = then raise \"foo\""$
   </body>
 </html> >>
 

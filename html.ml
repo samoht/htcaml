@@ -47,8 +47,133 @@ type link = {
 let html_of_link l : t =
   <:html<<a href=$str:l.href$>$str:l.text$</a>&>>
 
+module Code = struct
 
-let encoding : Xmlm.encoding option ref = ref None
+  let keywords1 = [
+    "|";
+    "do";
+    "done";
+    "downto";
+    "else";
+    "for";
+    "if";
+    "lazy";
+    "match";
+    "new";
+    "or";
+    "then";
+    "to";
+    "try";
+    "when";
+    "while";
+  ]
 
-let set_encoding e =
-  encoding := Some e
+  let keywords2 = [
+    "assert";
+    "include";
+  ]
+
+  let keywords3 = [
+    "open";
+  ]
+    
+  let keywords4 = [
+    "and";
+    "as";
+    "class";
+    "constraint";
+    "exception";
+    "external";
+    "fun";
+    "function";
+    "functor";
+    "in";
+    "inherit";
+    "initializer";
+    "let";
+    "method";
+    "module";
+    "mutable";
+    "of";
+    "private";
+    "rec";
+    "type";
+    "val";
+    "virtual";
+  ]
+
+  let keywords5 = [
+    "raise";
+  ]
+
+  let keywords6 = [
+    "asr";
+    "land";
+    "lor";
+    "lsl";
+    "lsr";
+    "lxor";
+    "mod";
+  ]
+
+  let keywords7 = [
+    "begin";
+    "end";
+    "object";
+    "sig";
+    "struct";
+  ]
+
+  let keywords8 = [
+    "false";
+    "true";
+  ]
+
+  type keyword1 = string with html
+  type keyword2 = string with html
+  type keyword3 = string with html
+  type keyword4 = string with html
+  type keyword5 = string with html
+  type keyword6 = string with html
+  type keyword7 = string with html
+  type keyword8 = string with html
+
+  let keywords = [| keywords1; keywords2; keywords3; keywords4; keywords5; keywords6; keywords7 |]
+    
+  let is_keyword str =
+    Str.string_match (Str.regexp (String.concat "\\|" (List.concat (Array.to_list keywords)))) str 0
+
+  exception Found of int
+
+  let find_class str =
+    try
+      for i = 0 to 7 do
+        if List.mem str keywords.(i) then
+          raise (Found i)
+      done;
+      raise Not_found
+    with Found i ->
+      i
+
+  let html_of_keywords = [|
+    html_of_keyword1;
+    html_of_keyword2;
+    html_of_keyword3;
+    html_of_keyword4;
+    html_of_keyword5;
+    html_of_keyword6;
+    html_of_keyword7;
+    html_of_keyword8;
+  |]
+ 
+  let parse str =
+    let rec aux accu = function
+      | []                 -> List.rev accu
+      | Str.Delim str :: t -> aux (`Data str :: accu) t
+      | Str.Text str  :: t -> 
+        if is_keyword str then
+          aux ((html_of_keywords.(find_class str) str) @ accu) t
+        else
+          aux (`Data str :: accu) t in
+    aux [] (Str.full_split (Str.regexp "[ \n\t]+") str)
+end
