@@ -172,7 +172,7 @@ module Code = struct
     html_of_keyword8;
   |]
  
-  let parse str =
+  let ocaml str =
     let rec aux accu = function
       | []                 -> List.rev accu
       | Str.Delim str :: t -> aux (`Data str :: accu) t
