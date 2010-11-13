@@ -100,9 +100,15 @@ let gen_html (_loc, n, t_exp) =
           | `P, _ -> <:patt< `$uid:n$ $patt$ >> in
         <:match_case< $patt$ -> $exprs$ >> in
       <:expr< match $id$ with [ $list:List.map mc s$ ] >>
+	  | Option o ->
+      let pid, eid = new_id _loc () in
+      <:expr<
+        match $id$ with [
+            None       -> []
+          | Some $pid$ -> $aux eid o$
+        ] >>
 
-	  | Option _
-	  | Arrow _  -> failwith "not yet supported"
+	  | Arrow _  -> failwith "arrow type is not yet supported"
 
 	  | Ext ("Html.t",_)
     | Var "Html.t"     -> <:expr< $id$ >>

@@ -75,7 +75,7 @@ and  i4 = ( int32 * int * int64 )
 and  p =
   | One of string * int array
   | Two of t
-(*  | Three of x option list *)
+  | Three of x option list
 
 and pp = [ `Poly1 | `Poly2 | `Poly3 of int ]
 
