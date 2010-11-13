@@ -43,6 +43,16 @@ type link = {
 let html_of_link l : t =
   <:html<<a href=$str:l.href$>$str:l.text$</a>&>>
 
+(* color tweaks for lists *)
+let interleave classes l =
+  let i = ref 0 in
+  let n = Array.length classes in
+  let get () =
+    let res = classes.(!i mod n) in
+    incr i;
+    res in
+  List.map (fun elt -> <:html< <div class=$str:get ()$>$elt$</div> >>) l
+
 module Code = struct
 
   let keywords1 = [
