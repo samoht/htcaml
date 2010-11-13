@@ -70,8 +70,8 @@ let gen_html (_loc, n, t_exp) =
       <:expr< List.flatten (Array.to_list $array$) >>
 	  | Tuple t  ->
       let ids = List.map (new_id _loc) t in
-      let patts = List.map fst ids in
-      let exprs = List.map2 (fun i t -> aux i t) (List.map snd ids) t in
+      let patts,exprs = List.split ids in
+      let exprs = List.map2 aux exprs t in
       <:expr<
         let $patt_tuple_of_list _loc patts$ = $id$ in
         List.flatten $expr_list_of_list _loc exprs$
@@ -84,7 +84,23 @@ let gen_html (_loc, n, t_exp) =
         List.map (fun (n,_,t) -> create_class _loc n (aux (new_id n) t)) d in
       let expr = expr_list_of_list _loc exprs in
       <:expr< $expr$ >>
-	  | Sum _
+	  | Sum (k, s) ->
+      let mc (n, args) =
+        let ids = List.map (new_id _loc) args in
+        let patts, exprs = List.split ids in
+        let exprs = match args with
+          | []  -> <:expr< [] >>
+          | [h] -> <:expr< $aux (List.hd exprs) h$ >>
+          | _   -> <:expr< List.flatten $expr_list_of_list _loc (List.map2 aux exprs args)$ >> in
+        let patt = patt_tuple_of_list _loc patts in
+        let patt = match k, args with
+          | `N, [] -> <:patt< $uid:n$ >>
+          | `P, [] -> <:patt< `$uid:n$ >>
+          | `N, _ -> <:patt< $uid:n$ $patt$ >>
+          | `P, _ -> <:patt< `$uid:n$ $patt$ >> in
+        <:match_case< $patt$ -> $exprs$ >> in
+      <:expr< match $id$ with [ $list:List.map mc s$ ] >>
+
 	  | Option _
 	  | Arrow _  -> failwith "not yet supported"
 

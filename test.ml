@@ -72,13 +72,13 @@ type i1 = int32
 and  i2 = int
 and  i3 = int64
 and  i4 = ( int32 * int * int64 )
-(*and  p =
+and  p =
   | One of string * int array
   | Two of t
-  | Three of x option list
+(*  | Three of x option list *)
 
 and pp = [ `Poly1 | `Poly2 | `Poly3 of int ]
-*)
+
 and t = {
   t1: M.t;
   mutable t2: string;
@@ -92,7 +92,7 @@ and t = {
   f3: string;
   f4: int64;
   f5: char array;
-} and tu = ( int  * f * i4 )
+} and tu = ( int  * f * pp )
 
 with html
 
