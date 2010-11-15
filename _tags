@@ -1,4 +1,3 @@
-true: debug
 <html.*>: pkg_str,pkg_xmlm
 <htcaml_ast.ml*>: pkg_camlp4,pkg_dyntype
 <htcaml_location.ml*>: pkg_camlp4
