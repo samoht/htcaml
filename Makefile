@@ -1,14 +1,16 @@
-FILES=\
+PA_FILES=\
 htcaml.cmxa htcaml.cma \
 htcaml_ast.mli htcaml_ast.cmi htcaml_ast.cmx \
 htcaml_parser.mli htcaml_parser.cmi htcaml_parser.cmx \
 htcaml_printer.mli htcaml_printer.cmi htcaml_printer.cmx \
 htcaml_quotations.cmi htcaml_quotations.cmx \
 htcaml_top.cmo \
-xhtml.cmi xhtml.cmx \
-html.cmx html.cmo html.cmi
+xhtml.cmi xhtml.cmx
 
-BFILES=$(addprefix _build/,$(FILES))
+LIB_FILES = html.cmx html.cmo html.cmi
+
+BFILES = $(addprefix _build/pa_lib/,$(PA_FILES)) \
+         $(addprefix _build/lib/,$(LIB_FILES))
 
 INCLS = $(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a") \
         $(shell ocamlfind query xmlm -predicates byte -r -format "-I %d %a") \
