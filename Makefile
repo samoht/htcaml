@@ -16,17 +16,17 @@ NAME_FILES = _build/pa_lib/pa_$(NAME).cmxa \
              _build/lib/$(NAME).cma \
              _build/lib/$(NAME).cmxa
 
-_PA_FILES = $(addprefix _build/pa_lib/,$(PA_FILES)) \
-PA_FILES = $(addsuffix .cmi,$(_PA_FILES)) \
-           $(addsuffix .cmo,$(_PA_FILES)) \
-           $(addsuffix .cmx,$(_PA_FILES))
+_PA_FILES  = $(addprefix _build/pa_lib/,$(PA_FILES))
+__PA_FILES = $(addsuffix .cmi,$(_PA_FILES)) \
+             $(addsuffix .cmo,$(_PA_FILES)) \
+             $(addsuffix .cmx,$(_PA_FILES))
 
-_LIB_FILES = $(addprefix _build/pa_lib/,$(LIB_FILES)) \
-LIB_FILES = $(addsuffix .cmi,$(_LIB_FILES)) \
-            $(addsuffix .cmo,$(_LIB_FILES)) \
-            $(addsuffix .cmx,$(_LIB_FILES))
+_LIB_FILES  = $(addprefix _build/lib/,$(LIB_FILES))
+__LIB_FILES = $(addsuffix .cmi,$(_LIB_FILES)) \
+              $(addsuffix .cmo,$(_LIB_FILES)) \
+              $(addsuffix .cmx,$(_LIB_FILES))
 
-FILES = $(NAME_FILES) $(PA_FILES) $(LIB_FILES) _build/pa_lib/$(NAME)_top.cmo
+FILES = $(NAME_FILES) $(__PA_FILES) $(__LIB_FILES) _build/pa_lib/$(NAME)_top.cmo
 
 all:
 	ocamlbuild pa_$(NAME).cma pa_$(NAME).cmxa $(NAME)_top.cmo
