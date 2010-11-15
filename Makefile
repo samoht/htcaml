@@ -1,29 +1,44 @@
-PA_FILES=\
-htcaml.cmxa htcaml.cma \
-htcaml_ast.mli htcaml_ast.cmi htcaml_ast.cmx \
-htcaml_parser.mli htcaml_parser.cmi htcaml_parser.cmx \
-htcaml_printer.mli htcaml_printer.cmi htcaml_printer.cmx \
-htcaml_quotations.cmi htcaml_quotations.cmx \
-htcaml_top.cmo \
-xhtml.cmi xhtml.cmx
+NAME      = htcaml
 
-LIB_FILES = html.cmx html.cmo html.cmi
+PA_FILES  = htcaml_ast htcaml_parser htcaml_printer htcaml_quotations xhtml
+LIB_FILES = html
 
-BFILES = $(addprefix _build/pa_lib/,$(PA_FILES)) \
-         $(addprefix _build/lib/,$(LIB_FILES))
+INCLS = \
+		$(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a") \
+    $(shell ocamlfind query xmlm -predicates byte -r -format "-I %d %a") \
+    $(shell ocamlfind query str -predicates byte -r -format "-I %d %a")
 
-INCLS = $(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a") \
-        $(shell ocamlfind query xmlm -predicates byte -r -format "-I %d %a") \
-        $(shell ocamlfind query str -predicates byte -r -format "-I %d %a")
+
+
+
+
+##########################################################
+NAME_FILES = _build/pa_lib/pa_$(NAME).cmxa \
+             _build/pa_lib/pa_$(NAME).cma \
+             _build/lib/$(NAME).cma \
+             _build/lib/$(NAME).cma
+
+PA_FILES = $(addprefix _build/pa_lib/,$(PA_FILES)) \
+PA_FILES = $(addsuffix .cmi,$(PA_FILES)) \
+           $(addsuffix .cmo,$(PA_FILES)) \
+           $(addsuffix .cmx,$(PA_FILES))
+
+LIB_FILES = $(addprefix _build/pa_lib/,$(LIB_FILES)) \
+LIB_FILES = $(addsuffix .cmi,$(LIB_FILES)) \
+            $(addsuffix .cmo,$(LIB_FILES)) \
+            $(addsuffix .cmx,$(LIB_FILES))
+
+FILES = $(NAME_FILES) $(PA_FILES) $(LIB_FILES) _build/pa_lib/$(NAME)_top.cmo
+
 all:
-	ocamlbuild htcaml.cma htcaml_top.cmo htcaml.cmxa
-	ocamlbuild -pp "camlp4o $(INCLS) pa_lib/htcaml.cma" html.cmo html.cmx
+	ocamlbuild pa_$(NAME).cma pa_$(NAME).cmxa $(NAME)_top.cmo
+	ocamlbuild -pp "camlp4o $(INCLS) pa_lib/pa_$(NAME).cma" $(NAME).cmxa html.cma
 
 install:
-	ocamlfind install htcaml META $(BFILES)
+	ocamlfind install $(NAME) META $(BFILES)
 
 uninstall:
-	ocamlfind remove htcaml
+	ocamlfind remove $(NAME)
 
 clean:
 	ocamlbuild -clean
@@ -31,13 +46,13 @@ clean:
 
 .PHONY: test
 test: all
-	ocamlbuild -pp "camlp4o $(INCLS) pa_lib/htcaml.cma" test.byte --
+	ocamlbuild -pp "camlp4o $(INCLS) pa_lib/pa_$(NAME).cma" test.byte --
 
 .PHONY: test_exp
 test_exp: test.ml
-	camlp4orf $(INCLS) _build/htcaml.cma test.ml -printer o > test_exp.ml
+	camlp4orf $(INCLS) _build/pa_$(NAME).cma test.ml -printer o > test_exp.ml
 	ocamlc $(INCLS) -annot -I _build/ html.cmo test_exp.ml -o test_exp
 
 debug: all
-	camlp4orf $(INCLS) _build/htcaml.cma test.ml
+	camlp4orf $(INCLS) _build/pa_$(NAME).cma test.ml
 
