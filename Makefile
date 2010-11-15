@@ -26,10 +26,10 @@ __LIB_FILES = $(addsuffix .cmi,$(_LIB_FILES)) \
               $(addsuffix .cmo,$(_LIB_FILES)) \
               $(addsuffix .cmx,$(_LIB_FILES))
 
-FILES = $(NAME_FILES) $(__PA_FILES) $(__LIB_FILES) _build/pa_lib/$(NAME)_top.cmo
+FILES = $(NAME_FILES) $(__PA_FILES) $(__LIB_FILES)
 
 all:
-	ocamlbuild pa_$(NAME).cma pa_$(NAME).cmxa $(NAME)_top.cmo
+	ocamlbuild pa_$(NAME).cma pa_$(NAME).cmxa
 	ocamlbuild -pp "camlp4o $(INCLS) pa_lib/pa_$(NAME).cma" $(NAME).cmxa $(NAME).cma
 
 install:
