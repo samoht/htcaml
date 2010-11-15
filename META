@@ -1,5 +1,5 @@
 name = "htcaml"
-version = "0.1.0"
+version = "0.1.1"
 description = "HyperText Caml Meta Languages"
 requires = "camlp4,str,dyntype.syntax,xmlm"
 archive(byte) = "html.cma"
