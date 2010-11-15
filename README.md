@@ -1,4 +1,4 @@
-A simple XHTML quotation mechanism for ocaml using camlp4.
+You can read a quick introduction to HTCaML [here](http://www.openmirage.org/blog/introduction-to-htcaml).
 
 This library started as a toy-project at the very good
 [CUFP tutorial](http://cufp.org/conference/sessions/2010/camlp4-and-template-haskell)
