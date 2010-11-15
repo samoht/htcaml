@@ -15,7 +15,7 @@ INCLS = $(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -
         $(shell ocamlfind query str -predicates byte -r -format "-I %d %a")
 all:
 	ocamlbuild htcaml.cma htcaml_top.cmo htcaml.cmxa
-	ocamlbuild -pp "camlp4o $(INCLS) htcaml.cma" html.cmo html.cmx
+	ocamlbuild -pp "camlp4o $(INCLS) pa_lib/htcaml.cma" html.cmo html.cmx
 
 install:
 	ocamlfind install htcaml META $(BFILES)
@@ -29,7 +29,7 @@ clean:
 
 .PHONY: test
 test: all
-	ocamlbuild -pp "camlp4o $(INCLS) htcaml.cma" test.byte --
+	ocamlbuild -pp "camlp4o $(INCLS) pa_lib/htcaml.cma" test.byte --
 
 .PHONY: test_exp
 test_exp: test.ml
