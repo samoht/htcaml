@@ -49,7 +49,7 @@ test: all
 .PHONY: test_exp
 test_exp: lib_test/test.ml
 	camlp4orf $(INCLS) _build/pa_lib/pa_$(NAME).cma lib_test/test.ml -printer o > _build/test_exp.ml
-	ocamlc $(INCLS) -annot -I _build/lib $(NAME).cma _build/test_exp.ml -o _build/test_exp
+	ocamlc -I +camlp4 dynlink.cma camlp4lib.cma $(INCLS) -annot -I _build/lib $(NAME).cma _build/test_exp.ml -o _build/test_exp
 
 debug: all
 	camlp4orf $(INCLS) _build/pa_lib/pa_$(NAME).cma test.ml
