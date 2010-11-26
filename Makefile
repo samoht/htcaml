@@ -4,7 +4,8 @@ PA_FILES  = htcaml_ast htcaml_parser htcaml_printer htcaml_quotations xhtml
 LIB_FILES = html
 
 INCLS = \
-		$(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a") \
+    $(shell ocamlfind query dyntype.syntax -predicates syntax,preprocessor -r -format "-I %d %a") \
+    $(shell ocamlfind query dyntype.helpers -predicates syntax,preprocessor -r -format "-I %d %a") \
     $(shell ocamlfind query xmlm -predicates byte -r -format "-I %d %a") \
     $(shell ocamlfind query str -predicates byte -r -format "-I %d %a") \
 
