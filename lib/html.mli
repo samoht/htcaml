@@ -15,6 +15,7 @@
  *)
 
 type t = (('a Xmlm.frag as 'a) Xmlm.frag) list
+type html = t
 
 val to_string : t -> string
 
@@ -31,4 +32,11 @@ val interleave : string array -> t list -> t list
 
 module Code : sig
   val ocaml : string -> t
+end
+
+module Tree : sig
+  type 'a t =
+    | Leaf of 'a
+    | Node of 'a * 'a t list
+  val html_of_t : ('a -> html) -> 'a t -> html
 end

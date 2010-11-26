@@ -15,6 +15,7 @@
  *)
 
 type t = (('a Xmlm.frag as 'a) Xmlm.frag) list
+type html = t
 
 let id x = x
 
@@ -182,4 +183,24 @@ module Code = struct
         else
           aux (`Data str :: accu) t in
     aux [] (Str.full_split (Str.regexp "[ \n\t]+") str)
+end
+
+module Tree = struct
+
+  type 'a t =
+    | Leaf of 'a
+    | Node of 'a * 'a t list
+
+  let rec html_of_t html_of_a = function
+    | Leaf a  ->
+      html_of_a a
+    | Node (a, tl) ->
+      let aux t =
+        <:html< <li> $html_of_t html_of_a t$ </li> >>
+      in
+      <:html<
+        $html_of_a a$
+        <ul>$list:List.map aux tl$</ul>
+      >>
+
 end
