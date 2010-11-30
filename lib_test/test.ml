@@ -47,7 +47,6 @@ let page = <:html<
     <br/>
     <div $alist:tag1$ $attrs:tag2$>tag</div>
     <a href=$str:(me ^ ".html")$ class="foo">$str:me$</a>
-    $Html.Code.ocaml "let f x = if x = then raise \"foo\""$
   </body>
 </html> >>
 
@@ -102,36 +101,3 @@ type o =
 
 let _ =
   Printf.printf "%s\n" (Html.to_string (html_of_i3 ~id:"foo" 31L))
-
-
-(* from http://www-sop.inria.fr/members/Manuel.Serrano/publi/sfp06/article.html *)
-let (/) d f =
-  match d with 
-    | "." 
-    | "./" -> f
-    | _    -> Filename.concat d f
-
-let hidden p =
-  p <> "." && (p.[0] = '.' || p.[0] = '_')
-
-let rec directory_tree root =
-  let rec aux path =
-    let abs_path = root / path in
-    if not (hidden path) && Sys.is_directory abs_path then begin
-      let files = Sys.readdir abs_path in
-      let files = Array.to_list files in
-      let files = List.map (fun file -> path / file) files in
-      Html.Tree.Node (path, List.map aux files)
-    end else
-      Html.Tree.Leaf path in
-  aux "."
-
-let html_of_string str = <:html< $str:str$ >>
-
-let dir = <:html<
-  My files :
-  $Html.Tree.html_of_t html_of_string (directory_tree (Sys.getcwd ()))$
->>
-
-let _ =
-  Printf.printf "%s\n" (Html.to_string dir)
