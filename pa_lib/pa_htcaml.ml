@@ -31,17 +31,24 @@ let new_id _loc _ =
 let create_class _loc n body =
   let tag = <:expr<
     ((("","div"), [(("","class"), $`str:n$)])
-     : Xmlm.tag) >> in
-  <:expr< `El $tag$ $body$ >>
+        : Xmlm.tag) >> in
+  <:expr<
+    match $body$ with [
+      []   -> []
+    | body -> [`El $tag$ body]
+    ] >>
 
 let create_id_class _loc n id body =
   let tag = <:expr<
     ((("","div"), [(("","id"), html_id); (("","class"), $`str:n$)]) : Xmlm.tag) >> in
   <:expr<
-    match id with [
-      None         -> $create_class _loc n body$
-    | Some html_id ->
-      `El $tag$ $body$
+    match $body$ with [
+      []   -> []
+    | body ->
+      match id with [
+        None         -> $create_class _loc n <:expr< body >>$
+      | Some html_id -> [ `El $tag$ $body$ ]
+      ]
     ] >>
 
 let gen_html (_loc, n, t_exp) =
@@ -83,7 +90,7 @@ let gen_html (_loc, n, t_exp) =
       let exprs =
         List.map (fun (n,_,t) -> create_class _loc n (aux (new_id n) t)) d in
       let expr = expr_list_of_list _loc exprs in
-      <:expr< $expr$ >>
+      <:expr< List.flatten $expr$ >>
 	  | Sum (k, s) ->
       let mc (n, args) =
         let ids = List.map (new_id _loc) args in
@@ -121,7 +128,7 @@ let gen_html (_loc, n, t_exp) =
   in
   let id = <:expr< $lid:n$ >> in
   <:binding< $lid:html_of n$ ?id $lid:n$ : (list (Xmlm.frag (Xmlm.frag 'a as 'a))) =
-      [ $create_id_class _loc n id (aux id t)$ ]
+    $create_id_class _loc n id (aux id t)$
   >>
 
 let () =
