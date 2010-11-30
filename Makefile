@@ -20,12 +20,14 @@ NAME_FILES = _build/pa_lib/pa_$(NAME).cmxa \
 _PA_FILES  = $(addprefix _build/pa_lib/,$(PA_FILES))
 __PA_FILES = $(addsuffix .cmi,$(_PA_FILES)) \
              $(addsuffix .cmo,$(_PA_FILES)) \
-             $(addsuffix .cmx,$(_PA_FILES))
+             $(addsuffix .cmx,$(_PA_FILES)) \
+             $(addsuffix .o,$(_PA_FILES))
 
 _LIB_FILES  = $(addprefix _build/lib/,$(LIB_FILES))
 __LIB_FILES = $(addsuffix .cmi,$(_LIB_FILES)) \
               $(addsuffix .cmo,$(_LIB_FILES)) \
-              $(addsuffix .cmx,$(_LIB_FILES))
+              $(addsuffix .cmx,$(_LIB_FILES)) \
+              $(addsuffix .o,$(_LIB_FILES))
 
 FILES = $(NAME_FILES) $(__PA_FILES) $(__LIB_FILES)
 
