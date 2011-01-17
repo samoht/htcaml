@@ -29,25 +29,28 @@ let new_id _loc _ =
 ;;
 
 let create_class _loc n body =
+  let pid, eid = new_id _loc () in
   let tag = <:expr<
     ((("","div"), [(("","class"), $`str:n$)])
         : Xmlm.tag) >> in
   <:expr<
     match $body$ with [
       []   -> []
-    | body -> [`El $tag$ body]
+    | $pid$ -> [`El $tag$ $eid$ ]
     ] >>
 
 let create_id_class _loc n id body =
+  let pid, eid = new_id _loc () in
+  let fn_pid, fn_eid = new_id _loc () in
   let tag = <:expr<
-    ((("","div"), [(("","id"), html_id); (("","class"), $`str:n$)]) : Xmlm.tag) >> in
+    ((("","div"), [(("","id"), $fn_eid$); (("","class"), $`str:n$)]) : Xmlm.tag) >> in
   <:expr<
     match $body$ with [
       []   -> []
-    | body ->
+    | $pid$ ->
       match id with [
-        None         -> $create_class _loc n <:expr< body >>$
-      | Some html_id -> [ `El $tag$ $body$ ]
+        None          -> $create_class _loc n <:expr< $eid$ >>$
+      | Some $fn_pid$ -> [ `El $tag$ $body$ ]
       ]
     ] >>
 

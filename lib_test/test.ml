@@ -43,6 +43,7 @@ let page = <:html<
   <body>
     $html_of_body b1$
     $html_of_link l1$
+    $str:"<b>test</b>"$
     $list:[title; body]$
     <br/>
     <div $alist:tag1$ $attrs:tag2$>tag</div>
