@@ -31,7 +31,7 @@ let rec output_t output = function
 let to_string t =
   let buf = Buffer.create 1024 in
   let output = Xmlm.make_output (`Buffer buf) in
-  Xmlm.output output (`Dtd None);
+  Xmlm.output output (`Dtd (Some ""));
   output_t output t;
   Buffer.contents buf
 
