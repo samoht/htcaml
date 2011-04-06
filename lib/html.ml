@@ -28,10 +28,12 @@ let rec output_t output = function
     output_t output t
   | [] -> ()
 
+let dtd = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+
 let to_string t =
   let buf = Buffer.create 1024 in
   let output = Xmlm.make_output (`Buffer buf) in
-  Xmlm.output output (`Dtd (Some ""));
+  Xmlm.output output (`Dtd (Some dtd));
   output_t output t;
   Buffer.contents buf
 
